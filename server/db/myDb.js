@@ -7,7 +7,10 @@ module.exports = new Sequelize(
     {
         dialect: 'mysql',
         host: process.env.DB_HOST_MYSQL,
-        port: process.env.DB_PORT_MYSQL
+        port: process.env.DB_PORT_MYSQL,
+        logging: true,
+        charset: 'utf8',
+        collate: 'utf8_general_ci', 
     }
 );
 

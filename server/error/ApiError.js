@@ -6,6 +6,14 @@ class ApiError extends Error {
     }
 
     static badRequest(message) {
+        return new ApiError(400, message)
+    }
+
+    static conflict(message) {
+        return new ApiError(409, message)
+    }
+
+    static notFound(message) {
         return new ApiError(404, message)
     }
 

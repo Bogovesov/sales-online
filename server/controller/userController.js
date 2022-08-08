@@ -21,7 +21,7 @@ class UserController {
         }
 
         const candidate = await User.findOne({ where: { email } })
-        if (candidate) {clea
+        if (candidate) {
             return next(ApiError.badRequest('User with the email already exist'))
         }
 
