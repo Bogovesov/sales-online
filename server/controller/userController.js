@@ -1,7 +1,7 @@
 const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { User, Basket } = require('../models/models')
+const UserService = require('../service/UserService')
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
@@ -15,21 +15,21 @@ const generateJwt = (id, email, role) => {
 
 class UserController {
     async registration(req, res, next) {
-        const { email, password, role } = req.body
-        if (!email || !password) {
-            return next(ApiError.badRequest('Incorrect email or password'))
-        }
+        const { name, email, password, age, role } = req.body
+        /* if (!email || !password) {
+             return next(ApiError.badRequest('Incorrect email or password'))
+         }*/
 
-        const candidate = await User.findOne({ where: { email } })
+        const candidate = await UserService.isExist(name)
         if (candidate) {
-            return next(ApiError.badRequest('User with the email already exist'))
+            return next(ApiError.badRequest('User with the name already exist'))
         }
 
-        const hashPassword = await bcrypt.hash(password, 5)
-        const user = await User.create({ email, role, password: hashPassword })
-        const basket = await Basket.create({ userId: user.id })
+
+        const user = await UserService.create(req.body);
+
         const token = generateJwt(user.id, user.email, user.role)
-        return res.json({ token })
+        return res.json(user)
     }
 
     async login(req, res, next) {
@@ -49,6 +49,11 @@ class UserController {
     async check(req, res, next) {
         const token = generateJwt(req.user.id, req.user.email, req.user.role)
         return res.json({ token })
+    }
+
+    async getAll(req, res, next) {
+        const users = await UserService.getAll();
+        return res.json(users)
     }
 }
 

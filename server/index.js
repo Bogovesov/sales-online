@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
-const sequelize = require('./db');
-const sequelizeMy = require('./db/myDb');
-const models = require('./models/models');
-const modelsSales = require('./models/modelsSales')
+//const sequelize = require('./db');
+const sequelize = require('./db/db');
+//const models = require('./models/models');
+const models = require('./models/models')
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const router = require('./routes/index');
@@ -22,7 +22,7 @@ app.use('/api', router);
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'WORKING' });
+    res.status(200).json({message: 'WORKING'});
 })
 
 const start = async () => {
@@ -30,8 +30,8 @@ const start = async () => {
         //  await sequelize.authenticate()
         // await sequelize.sync()
 
-        await sequelizeMy.authenticate();
-        await sequelizeMy.sync();
+        await sequelize.authenticate();
+        await sequelize.sync();
 
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)

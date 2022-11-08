@@ -1,14 +1,13 @@
-const { Company } = require('../models/modelsSales');
 const CompanyService = require('../service/CompanyService');
 const ApiError = require('../error/ApiError');
-const { validationResult } = require('express-validator');
+const {validationResult} = require('express-validator');
 
 class CompanyController {
     async create(req, res, next) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
+                return res.status(400).json({errors: errors.array()});
             }
 
             const candidate = await CompanyService.isExist(req.body.name);
@@ -17,7 +16,7 @@ class CompanyController {
             }
 
             const client = await CompanyService.create(req.body);
-            res.json({ client });
+            res.json({client});
         } catch (e) {
             next(ApiError.internal(e.message))
         }
@@ -25,7 +24,7 @@ class CompanyController {
 
     async getAll(req, res, next) {
         try {
-            const clients = await CompanyService.getAll();
+            const clients = await CompanyService.getAll(req.query);
             return res.json(clients);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -34,7 +33,7 @@ class CompanyController {
 
     async getOne(req, res, next) {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
             const client = await CompanyService.getOne(id);
             return res.json(client);
         } catch (e) {
@@ -44,8 +43,8 @@ class CompanyController {
 
     async deleteOne(req, res, next) {
         try {
-            const { id } = req.params;
-            const count = await Client.destroy({ where: { 'anum': id } });
+            const {id} = req.params;
+            const count = await Client.destroy({where: {'anum': id}});
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));

@@ -1,22 +1,22 @@
-const ClientService = require('../service/ClientService');
+const ProductService = require('../service/ProductService');
 const ApiError = require('../error/ApiError');
-const { validationResult } = require('express-validator');
+const {validationResult} = require('express-validator');
 
-class ClientController {
+class ProductController {
     async create(req, res, next) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
+                return res.status(400).json({errors: errors.array()});
             }
 
-            const candidate = await ClientService.isExist(req.body.name);
+            const candidate = await ProductService.isExist(req.body.name);
             if (candidate) {
-                return next(ApiError.conflict('client already exist'))
+                return next(ApiError.conflict('product already exist'))
             }
 
-            const client = await ClientService.create(req.body);
-            res.json(client);
+            const product = await ProductService.create(req.body);
+            res.json(product);
         } catch (e) {
             next(ApiError.internal(e.message))
         }
@@ -24,8 +24,8 @@ class ClientController {
 
     async getAll(req, res, next) {
         try {
-            const clients = await ClientService.getAll(req.query);
-            return res.json(clients);
+            const products = await ProductService.getAll(req.query);
+            return res.json(products);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -33,9 +33,9 @@ class ClientController {
 
     async getOne(req, res, next) {
         try {
-            const { id } = req.params;
-            const client = await ClientService.getOne(id);
-            return res.json(client);
+            const {id} = req.params;
+            const product = await ProductService.getOne(id);
+            return res.json(product);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -43,8 +43,8 @@ class ClientController {
 
     async deleteOne(req, res, next) {
         try {
-            const { id } = req.params;
-            const count = await ClientService.deleteOne(id);
+            const {id} = req.params;
+            const count = await ProductService.deleteOne(id);
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -53,7 +53,7 @@ class ClientController {
 
     async deleteAll(req, res, next) {
         try {
-            const count = await ClientService.deleteAll();
+            const count = await ProductService.deleteAll();
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -61,4 +61,4 @@ class ClientController {
     }
 }
 
-module.exports = new ClientController();
+module.exports = new ProductController();

@@ -1,5 +1,4 @@
-const { Company } = require('../models/modelsSales');
-const ApiError = require('../error/ApiError');
+const { Company } = require('../models/models');
 
 class CompanyService {
     async create(company) {
@@ -12,9 +11,28 @@ class CompanyService {
         return company;
     }
 
-    async getAll() {
-        const companies = await Company.findAll();
+    async getAll(query) {
+        const { limit } = query;
+        const companies = await Company.findAll(limit ? { limit: +limit, order: [['anum', 'DESC']] } : {});
         return companies;
+    }
+
+    async getOne(id) {
+        const company = await Company.findOne({ where: { 'anum': id } });
+        return company;
+    }
+
+    async deleteOne(id) {
+        const count = await Company.destroy({ where: { 'anum': id } });
+        return count;
+    }
+
+    async deleteAll() {
+        const count = await Company.destroy({
+            where: {},
+            truncate: true
+        });
+        return count;
     }
 }
 

@@ -1,5 +1,4 @@
-const { Client } = require('../models/modelsSales');
-const ApiError = require('../error/ApiError');
+const { Client } = require('../models/models');
 
 class ClientService {
     async create(client) {
@@ -13,8 +12,9 @@ class ClientService {
         return candidate;
     }
 
-    async getAll() {
-        const clients = await Client.findAll();
+    async getAll(query) {
+        const { limit, companyId } = query;
+        const clients = await Client.findAll(limit ? { limit: +limit, order: [['anum', 'DESC']] } : {});
         return clients;
     }
 

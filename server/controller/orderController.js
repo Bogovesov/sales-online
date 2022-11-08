@@ -1,8 +1,8 @@
-const ClientService = require('../service/ClientService');
+const OrderService = require('../service/OrderService');
 const ApiError = require('../error/ApiError');
 const { validationResult } = require('express-validator');
 
-class ClientController {
+class OrderController {
     async create(req, res, next) {
         try {
             const errors = validationResult(req);
@@ -10,13 +10,13 @@ class ClientController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            const candidate = await ClientService.isExist(req.body.name);
+            const candidate = await OrderService.isExist(req.body.name);
             if (candidate) {
-                return next(ApiError.conflict('client already exist'))
+                return next(ApiError.conflict('oredr already exist'))
             }
 
-            const client = await ClientService.create(req.body);
-            res.json(client);
+            const order = await OrderService.create(req.body);
+            res.json(order);
         } catch (e) {
             next(ApiError.internal(e.message))
         }
@@ -24,8 +24,8 @@ class ClientController {
 
     async getAll(req, res, next) {
         try {
-            const clients = await ClientService.getAll(req.query);
-            return res.json(clients);
+            const orders = await OrderService.getAll(req.query);
+            return res.json(orders);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -34,8 +34,8 @@ class ClientController {
     async getOne(req, res, next) {
         try {
             const { id } = req.params;
-            const client = await ClientService.getOne(id);
-            return res.json(client);
+            const order = await OrderService.getOne(id);
+            return res.json(order);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -44,7 +44,7 @@ class ClientController {
     async deleteOne(req, res, next) {
         try {
             const { id } = req.params;
-            const count = await ClientService.deleteOne(id);
+            const count = await OrderService.deleteOne(id);
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -53,7 +53,7 @@ class ClientController {
 
     async deleteAll(req, res, next) {
         try {
-            const count = await ClientService.deleteAll();
+            const count = await OrderService.deleteAll();
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -61,4 +61,4 @@ class ClientController {
     }
 }
 
-module.exports = new ClientController();
+module.exports = new OrderController();
