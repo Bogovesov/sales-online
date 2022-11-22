@@ -67,8 +67,8 @@ class ProductService {
             Ch1: product.Ch1,
         };
 
-        const updatedProduct = await Product.update(data, { where: { 'anum': id } });
-        return updatedProduct;
+        const count = await Product.update(data, { where: { 'anum': id } });
+        return count;
     }
 }
 

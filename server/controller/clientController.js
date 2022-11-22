@@ -59,6 +59,32 @@ class ClientController {
             next(ApiError.internal(e.message));
         }
     }
+
+    async updateOne(req, res, next) {
+        try {
+            const { id } = req.params;
+            const updatedItem= await ClientService.updateOne(req.body, id);
+            return res.json(updatedItem);
+        } catch (e) {
+            next(ApiError.internal(e.message));
+        }
+    }
+
+    async update(req, res, next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+
+            req.body.forEach(async item => {
+                await ClientService.updateOne(item, item.anum); 
+            });
+            return res.json(req.body);
+        } catch (e) {
+            next(ApiError.internal(e.message));
+        }
+    }
 }
 
 module.exports = new ClientController();

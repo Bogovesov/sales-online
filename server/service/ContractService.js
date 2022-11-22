@@ -11,6 +11,11 @@ class ContractService {
         return contract;
     }
 
+    async isExistId(id) {
+        const item = await Contract.findOne({ where: { 'anum': id } });
+        return item;
+    }
+
     async getAll() {
         const contracts = await Contract.findAll();
         return contracts;
@@ -31,6 +36,27 @@ class ContractService {
             where: {},
             truncate: true
         });
+        return count;
+    }
+
+    async updateOne(contract, id) {
+        const existedId = await this.isExistId(id);
+        if (!existedId) {
+            throw new Error('contract is not exist');
+        }
+
+        const data = {
+            cid: contract.cid,
+            DateOpen: contract.DateOpen,
+            OrdNmr: contract.OrdNmr,
+            DateClose: contract.DateClose,
+            DateDisp: contract.DateDisp,
+            DateStore: contract.DateStore,
+            Finish: contract.Finish,
+            _Add: contract._Add,
+        };
+
+        const count = await Contract.update(data, { where: { 'anum': id } });
         return count;
     }
 }

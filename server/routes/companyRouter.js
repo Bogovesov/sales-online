@@ -10,5 +10,7 @@ router.get('/', compayController.getAll);
 router.get('/:id', compayController.getOne);
 router.delete('/:id', compayController.deleteOne);
 router.delete('/', compayController.deleteAll);
+router.patch('/:id', compayController.updateOne);
+router.patch('/', compayController.update);
 
 module.exports = router

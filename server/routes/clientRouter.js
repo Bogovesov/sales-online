@@ -8,7 +8,9 @@ const router = new Router();
 router.post('/', clientCreateValidation, clientController.create);
 router.get('/', clientController.getAll);
 router.get('/:id', clientController.getOne);
-router.delete('/:id', clientController.deleteOne)
-router.delete('/', clientController.deleteAll)
+router.delete('/:id', clientController.deleteOne);
+router.delete('/', clientController.deleteAll);
+router.patch('/:id', clientController.updateOne);
+router.patch('/', clientController.update);
 
 module.exports = router

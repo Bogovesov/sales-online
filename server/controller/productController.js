@@ -63,8 +63,8 @@ class ProductController {
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
-            const updatedProduct = await ProductService.updateOne(req.body, id);
-            return res.json(updatedProduct);
+            const updatedItem = await ProductService.updateOne(req.body, id);
+            return res.json(updatedItem);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -77,8 +77,8 @@ class ProductController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            req.body.forEach(async product => {
-                await ProductService.updateOne(product, product.anum); 
+            req.body.forEach(async item => {
+                await ProductService.updateOne(item, item.anum); 
             });
             return res.json(req.body);
         } catch (e) {

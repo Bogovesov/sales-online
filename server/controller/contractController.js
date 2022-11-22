@@ -1,8 +1,8 @@
-const CompanyService = require('../service/CompanyService');
+const ContractService = require('../service/ContractService');
 const ApiError = require('../error/ApiError');
-const { validationResult } = require('express-validator');
+const { validationResult, body } = require('express-validator');
 
-class CompanyController {
+class ProductController {
     async create(req, res, next) {
         try {
             const errors = validationResult(req);
@@ -10,13 +10,13 @@ class CompanyController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            const candidate = await CompanyService.isExist(req.body.name);
+            const candidate = await ContractService.isExist(req.body.name);
             if (candidate) {
-                return next(ApiError.conflict('company already exist'))
+                return next(ApiError.conflict('contract already exist'))
             }
 
-            const client = await CompanyService.create(req.body);
-            res.json({ client });
+            const product = await ContractService.create(req.body);
+            res.json(product);
         } catch (e) {
             next(ApiError.internal(e.message))
         }
@@ -24,8 +24,8 @@ class CompanyController {
 
     async getAll(req, res, next) {
         try {
-            const clients = await CompanyService.getAll(req.query);
-            return res.json(clients);
+            const products = await ContractService.getAll(req.query);
+            return res.json(products);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -34,8 +34,8 @@ class CompanyController {
     async getOne(req, res, next) {
         try {
             const { id } = req.params;
-            const client = await CompanyService.getOne(id);
-            return res.json(client);
+            const product = await ContractService.getOne(id);
+            return res.json(product);
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -44,7 +44,7 @@ class CompanyController {
     async deleteOne(req, res, next) {
         try {
             const { id } = req.params;
-            const count = await CompanyService.deleteOne(id);
+            const count = await ContractService.deleteOne(id);
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -53,7 +53,7 @@ class CompanyController {
 
     async deleteAll(req, res, next) {
         try {
-            const count = await CompanyService.deleteAll();
+            const count = await ContractService.deleteAll();
             return res.json(count);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -63,7 +63,7 @@ class CompanyController {
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
-            const updatedItem = await CompanyService.updateOne(req.body, id);
+            const updatedItem = await ContractService.updateOne(req.body, id);
             return res.json(updatedItem);
         } catch (e) {
             next(ApiError.internal(e.message));
@@ -78,7 +78,7 @@ class CompanyController {
             }
 
             req.body.forEach(async item => {
-                await CompanyService.updateOne(item, item.anum);
+                await ContractService.updateOne(item, item.anum); 
             });
             return res.json(req.body);
         } catch (e) {
@@ -87,4 +87,4 @@ class CompanyController {
     }
 }
 
-module.exports = new CompanyController();
+module.exports = new ProductController();

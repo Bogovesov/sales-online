@@ -11,6 +11,11 @@ class CompanyService {
         return company;
     }
 
+    async isExistId(id) {
+        const item = await Company.findOne({ where: { 'anum': id } });
+        return item;
+    }
+
     async getAll(query) {
         const { limit } = query;
         const companies = await Company.findAll(limit ? { limit: +limit, order: [['anum', 'DESC']] } : {});
@@ -32,6 +37,22 @@ class CompanyService {
             where: {},
             truncate: true
         });
+        return count;
+    }
+
+    async updateOne(company, id) {
+        const existedId = await this.isExistId(id);
+        if (!existedId) {
+            throw new Error('company is not exist');
+        }
+
+        const data = {
+            name: company.name,
+            addr: company.phone,
+            rem: company.rem,
+        };
+
+        const count = await Company.update(data, { where: { 'anum': id } });
         return count;
     }
 }
