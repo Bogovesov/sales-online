@@ -65,6 +65,7 @@ class ProductService {
             Var: product.Var,
             StoreDate: product.StoreDate,
             Ch1: product.Ch1,
+            discount: product.discount,
         };
 
         const count = await Product.update(data, { where: { 'anum': id } });

@@ -175,6 +175,7 @@ const Product = sequelize.define('product', {
     Var: { type: DataTypes.INTEGER, allowNull: true },
     StoreDate: { type: DataTypes.DATEONLY, allowNull: true },
     Ch1: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    discount: { type: DataTypes.INTEGER, allowNull: true },
 }, {
     tableName: 'products',
     timestamps: false,
