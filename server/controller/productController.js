@@ -10,13 +10,13 @@ class ProductController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            // const candidate = await ProductService.isExist(req.body.name);
-            // if (candidate) {
-            //     return next(ApiError.conflict('product already exist'))
-            // }
-
-            const product = await ProductService.create(req.body);
-            res.json(product);
+            if (Array.isArray(req.body)) {
+                const products = await Promise.all(req.body.map(async (item) => await ProductService.create(item)));
+                res.json(products);
+            } else {
+                const product = await ProductService.create(req.body);
+                res.json(product);
+            }
         } catch (e) {
             next(ApiError.internal(e.message))
         }
@@ -53,8 +53,10 @@ class ProductController {
 
     async deleteAll(req, res, next) {
         try {
-            const count = await ProductService.deleteAll();
-            return res.json(count);
+            if (Array.isArray(req.body)) {
+                const products = await Promise.all(req.body.map(async (item) => await ProductService.deleteOne(item.anum)));
+                res.json(products);
+            }
         } catch (e) {
             next(ApiError.internal(e.message));
         }
@@ -79,7 +81,7 @@ class ProductController {
             }
 
             req.body.forEach(async item => {
-                await ProductService.updateOne(item, item.anum); 
+                await ProductService.updateOne(item, item.anum);
             });
             return res.json(req.body);
         } catch (e) {
