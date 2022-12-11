@@ -120,6 +120,7 @@ const Order = sequelize.define('order', {
     _Add: { type: DataTypes.TEXT, allowNull: true },
     AddS: { type: DataTypes.TEXT, allowNull: true },
     Color: { type: DataTypes.STRING(45), allowNull: true },
+    shipping_rate: { type: DataTypes.DECIMAL(13, 2), allowNull: true, defaultValue: 1.27 },
 },
     {
         tableName: 'orders',

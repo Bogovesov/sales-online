@@ -10,10 +10,10 @@ class ProductController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            const candidate = await ProductService.isExist(req.body.name);
-            if (candidate) {
-                return next(ApiError.conflict('product already exist'))
-            }
+            // const candidate = await ProductService.isExist(req.body.name);
+            // if (candidate) {
+            //     return next(ApiError.conflict('product already exist'))
+            // }
 
             const product = await ProductService.create(req.body);
             res.json(product);
@@ -62,6 +62,7 @@ class ProductController {
 
     async updateOne(req, res, next) {
         try {
+            console.log(req.body);
             const { id } = req.params;
             const updatedItem = await ProductService.updateOne(req.body, id);
             return res.json(updatedItem);
